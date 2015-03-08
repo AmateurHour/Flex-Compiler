@@ -1,0 +1,179 @@
+    0 $accept: prog_start $end
+
+    1 prog_start: program ident semicolon block end_program
+    2           | error
+
+    3 program: PROGRAM
+    4        | error
+
+    5 ident: IDENT
+
+    6 plus: PLUS
+
+    7 mult: MULT
+
+    8 div: DIV
+
+    9 mod: MOD
+
+   10 minus: MINUS
+
+   11 l_paren: L_PAREN
+
+   12 r_paren: R_PAREN
+
+   13 l_square: L_SQUARE
+
+   14 r_square: R_SQUARE
+
+   15 array: ARRAY
+
+   16 semicolon: SEMICOLON
+   17          | error
+
+   18 colon: COLON
+   19      | error
+
+   20 comma: COMMA
+
+   21 true: TRUE
+
+   22 false: FALSE
+
+   23 break: BREAK
+
+   24 continue: CONTINUE
+
+   25 question: QUESTION
+
+   26 exit: EXIT
+
+   27 if: IF
+
+   28 of: OF
+
+   29 while: WHILE
+
+   30 do: DO
+
+   31 read: READ
+
+   32 write: WRITE
+
+   33 then: THEN
+
+   34 end_if: END_IF
+
+   35 assign: ASSIGN
+
+   36 else: ELSE
+
+   37 else_if: ELSE_IF
+
+   38 begin_loop: BEGIN_LOOP
+
+   39 end_loop: END_LOOP
+
+   40 and: AND
+
+   41 or: OR
+
+   42 not: NOT
+
+   43 end_program: END_PROGRAM
+   44            | error
+
+   45 begin_program: BEGIN_PROGRAM
+   46              | error
+
+   47 number: NUMBER
+   48       | error
+
+   49 integer: INTEGER
+   50        | error
+
+   51 block: declaration semicolon block2
+
+   52 block2: declaration semicolon block2
+   53       | begin_program statement semicolon statement1
+
+   54 declaration: ident declaration2
+
+   55 declaration2: comma ident declaration2
+   56             | colon declaration3
+
+   57 declaration3: integer
+   58             | array l_square number r_square of integer
+
+   59 statement: Var assign VarDec
+   60          | if BoolExp then statement semicolon statement1 IfDec end_if
+   61          | while BoolExp begin_loop statement semicolon statement1 end_loop
+   62          | do begin_loop statement semicolon statement1 end_loop while BoolExp
+   63          | read Var VarList
+   64          | write Var VarList
+   65          | break
+   66          | continue
+   67          | exit
+
+   68 VarList: comma Var VarList
+   69        | %empty
+
+   70 BoolExp: RelationAndExp BoolExp1
+
+   71 BoolExp1: or RelationAndExp BoolExp1
+   72         | %empty
+
+   73 RelationAndExp: RelationExp RelationAndExp1
+
+   74 RelationAndExp1: and RelationExp RelationAndExp1
+   75                | %empty
+
+   76 RelationExp: not RelationExp1
+   77            | RelationExp1
+
+   78 RelationExp1: Expression comp Expression
+   79             | true
+   80             | false
+   81             | l_paren BoolExp r_paren
+
+   82 comp: EQ
+   83     | NEQ
+   84     | LT
+   85     | GT
+   86     | LTE
+   87     | GTE
+
+   88 Expression: MultiplicativeExp Expression1
+
+   89 Expression1: plus MultiplicativeExp Expression1
+   90            | minus MultiplicativeExp Expression1
+   91            | %empty
+
+   92 MultiplicativeExp: Term MultiplicativeExp1
+
+   93 MultiplicativeExp1: div Term MultiplicativeExp1
+   94                   | mult Term MultiplicativeExp1
+   95                   | mod Term MultiplicativeExp1
+   96                   | %empty
+
+   97 Term: minus Term1
+   98     | Term1
+
+   99 Term1: Var
+  100      | number
+  101      | l_paren Expression r_paren
+
+  102 Var: ident Var1
+
+  103 Var1: l_square Expression r_square
+  104     | %empty
+
+  105 VarDec: Expression
+  106       | BoolExp question Expression colon Expression
+
+  107 IfDec: else_if BoolExp statement semicolon statement1 IfDec
+  108      | else statement semicolon statement1
+  109      | %empty
+
+  110 statement1: statement semicolon statement1
+  111           | %empty
