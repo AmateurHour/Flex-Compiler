@@ -1,5 +1,5 @@
 # Flex-Compiler
-This is my ongoing, quarter-long project for CS152-Compiler Design at UC Riverside.
+Two-person quarter-long project for CS152-Compiler Design at UC Riverside.
 
 Requirements listed at:
 
